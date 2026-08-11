@@ -4,4 +4,4 @@
 - Commit selected changes.
 - Push commits that are ahead of the tracked branch.
 - Merge or squash a linked feature worktree into `main`.
-
+- Confirm progress and success remain visible while Git actions finish.
