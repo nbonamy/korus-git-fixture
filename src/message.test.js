@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { formatFarewell, formatGreeting } from './message.js';
+import { formatFarewell, formatGreeting, formatQuestion } from './message.js';
 
 test('formats a greeting', () => {
   assert.equal(formatGreeting('Claw'), 'Hello, Claw!');
@@ -12,4 +12,8 @@ test('formats a farewell', () => {
 
 test('trims names before formatting', () => {
   assert.equal(formatGreeting('  Claw  '), 'Hello, Claw!');
+});
+
+test('formats a question', () => {
+  assert.equal(formatQuestion('Claw'), 'How are you, Claw?');
 });
