@@ -13,3 +13,5 @@ npm run demo
 ## Fixture state
 
 This README change is intentionally left unstaged for commit-scope testing.
+
+The second test round keeps another README edit unstaged as well.
