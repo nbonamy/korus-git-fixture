@@ -9,3 +9,7 @@ test('formats a greeting', () => {
 test('formats a farewell', () => {
   assert.equal(formatFarewell('Claw'), 'Goodbye, Claw!');
 });
+
+test('trims names before formatting', () => {
+  assert.equal(formatGreeting('  Claw  '), 'Hello, Claw!');
+});

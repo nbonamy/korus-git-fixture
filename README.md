@@ -10,3 +10,6 @@ npm test
 npm run demo
 ```
 
+## Fixture state
+
+This README change is intentionally left unstaged for commit-scope testing.

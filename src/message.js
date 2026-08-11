@@ -1,7 +1,11 @@
 export function formatGreeting(name) {
-  return `Hello, ${name}!`;
+  return `Hello, ${normalizeName(name)}!`;
 }
 
 export function formatFarewell(name) {
-  return `Goodbye, ${name}!`;
+  return `Goodbye, ${normalizeName(name)}!`;
+}
+
+function normalizeName(name) {
+  return name.trim();
 }
