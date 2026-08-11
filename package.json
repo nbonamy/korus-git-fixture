@@ -1,0 +1,10 @@
+{
+  "name": "codex-claw-git-fixture",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "demo": "node src/index.js",
+    "test": "node --test"
+  }
+}
+
