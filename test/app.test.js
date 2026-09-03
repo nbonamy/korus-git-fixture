@@ -37,6 +37,13 @@ test('starts an existing task', async () => {
   assert.equal(store.board.tasks[0].status, 'doing');
 });
 
+test('lists the versioned board as JSON', async () => {
+  const store = memoryStore([{ id: 'task_ship', title: 'Ship', status: 'todo', priority: 'normal' }]);
+  const output = [];
+  await run(['list', '--json'], { store, output: (line) => output.push(line) });
+  assert.deepEqual(JSON.parse(output[0]), store.board);
+});
+
 test('fails clearly for a missing task', async () => {
   await assert.rejects(run(['done', 'missing'], { store: memoryStore(), output: () => {} }), /Task not found/);
 });

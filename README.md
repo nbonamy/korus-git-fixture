@@ -22,7 +22,7 @@ Use `--file <path>` to work with another board. The default is
 | Command | Description |
 | --- | --- |
 | `add <title> [--priority low\|normal\|high]` | Add a task to the board. |
-| `list` | List tasks in workflow order. |
+| `list [--json]` | List tasks in workflow order or as machine-readable JSON. |
 | `start <id>` | Move a task to `doing`. |
 | `done <id>` | Complete a task. |
 | `help` | Show command help. |

@@ -9,7 +9,8 @@ test('parses add options in any order', () => {
 });
 
 test('uses the default board for list', () => {
-  assert.deepEqual(parseArguments(['list']), { command: 'list', file: '.relay/tasks.json' });
+  assert.deepEqual(parseArguments(['list']), { command: 'list', file: '.relay/tasks.json', json: false });
+  assert.deepEqual(parseArguments(['list', '--json']), { command: 'list', file: '.relay/tasks.json', json: true });
 });
 
 test('rejects unknown commands and extra arguments', () => {

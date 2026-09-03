@@ -10,8 +10,9 @@ export function parseArguments(argv) {
     return { command: 'help', file };
   }
   if (command === 'list') {
+    const json = takeFlag(args, '--json');
     assertNoArguments(args);
-    return { command, file };
+    return { command, file, json };
   }
   if (command === 'add') {
     const priority = takeOption(args, '--priority') ?? 'normal';
@@ -26,6 +27,13 @@ export function parseArguments(argv) {
   }
 
   throw new Error(`Unknown command: ${command}.`);
+}
+
+function takeFlag(args, name) {
+  const index = args.indexOf(name);
+  if (index === -1) return false;
+  args.splice(index, 1);
+  return true;
 }
 
 function takeOption(args, name) {
