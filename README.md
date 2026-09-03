@@ -10,6 +10,7 @@ interface for capturing and moving work.
 npm install
 npm start -- add "Ship the release" --priority high
 npm start -- list
+npm start -- rename <task-id> "Ship the stable release"
 npm start -- start <task-id>
 npm start -- done <task-id>
 ```
@@ -23,6 +24,7 @@ Use `--file <path>` to work with another board. The default is
 | --- | --- |
 | `add <title> [--priority low\|normal\|high]` | Add a task to the board. |
 | `list` | List tasks in workflow order. |
+| `rename <id> <title>` | Rename a task. |
 | `start <id>` | Move a task to `doing`. |
 | `done <id>` | Complete a task. |
 | `help` | Show command help. |

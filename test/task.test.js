@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { createTask, transitionTask } from '../src/task.js';
+import { createTask, renameTask, transitionTask } from '../src/task.js';
 
 const fixedClock = () => new Date('2026-09-03T14:00:00.000Z');
 
@@ -29,4 +29,28 @@ test('transitions tasks and records completion', () => {
 
 test('does not reopen completed tasks', () => {
   assert.throws(() => transitionTask({ status: 'done' }, 'doing', { now: fixedClock }), /cannot be reopened/i);
+});
+
+test('renames a task while preserving its other fields', () => {
+  const task = {
+    id: 'task_1234',
+    title: 'Ship release',
+    priority: 'high',
+    status: 'done',
+    createdAt: '2026-09-03T13:00:00.000Z',
+    updatedAt: '2026-09-03T14:00:00.000Z',
+    completedAt: '2026-09-03T14:00:00.000Z',
+  };
+
+  assert.deepEqual(renameTask(task, '  Ship stable release  ', {
+    now: () => new Date('2026-09-03T15:00:00.000Z'),
+  }), {
+    ...task,
+    title: 'Ship stable release',
+    updatedAt: '2026-09-03T15:00:00.000Z',
+  });
+});
+
+test('rejects a blank task rename', () => {
+  assert.throws(() => renameTask({ title: 'Ship release' }, '  '), /title is required/i);
 });
