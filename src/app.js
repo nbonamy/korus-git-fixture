@@ -14,7 +14,11 @@ export async function run(argv, options = {}) {
   const store = options.store ?? new FileTaskStore(input.file);
   const board = await store.read();
   if (input.command === 'list') {
-    output(formatTaskTable(board.tasks));
+    const tasks = board.tasks.filter((task) => (
+      (!input.status || task.status === input.status)
+      && (!input.priority || task.priority === input.priority)
+    ));
+    output(formatTaskTable(tasks));
     return;
   }
   if (input.command === 'add') {
@@ -37,6 +41,6 @@ export const helpText = `Relayboard
 
 Usage:
   relayboard [--file path] add <title> [--priority low|normal|high]
-  relayboard [--file path] list
+  relayboard [--file path] list [--status todo|doing|done] [--priority low|normal|high]
   relayboard [--file path] start <id>
   relayboard [--file path] done <id>`;

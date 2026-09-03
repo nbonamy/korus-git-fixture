@@ -9,7 +9,17 @@ test('parses add options in any order', () => {
 });
 
 test('uses the default board for list', () => {
-  assert.deepEqual(parseArguments(['list']), { command: 'list', file: '.relay/tasks.json' });
+  assert.deepEqual(parseArguments(['list']), {
+    command: 'list', file: '.relay/tasks.json', status: undefined, priority: undefined,
+  });
+});
+
+test('parses and validates list filters', () => {
+  assert.deepEqual(parseArguments(['list', '--status', 'doing', '--priority', 'high']), {
+    command: 'list', file: '.relay/tasks.json', status: 'doing', priority: 'high',
+  });
+  assert.throws(() => parseArguments(['list', '--status', 'blocked']), /Status must be one of/);
+  assert.throws(() => parseArguments(['list', '--priority', 'urgent']), /Priority must be one of/);
 });
 
 test('rejects unknown commands and extra arguments', () => {
