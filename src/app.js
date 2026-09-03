@@ -14,7 +14,7 @@ export async function run(argv, options = {}) {
   const store = options.store ?? new FileTaskStore(input.file);
   const board = await store.read();
   if (input.command === 'list') {
-    output(formatTaskTable(board.tasks));
+    output(input.json ? JSON.stringify(board, null, 2) : formatTaskTable(board.tasks));
     return;
   }
   if (input.command === 'add') {
@@ -37,6 +37,6 @@ export const helpText = `Relayboard
 
 Usage:
   relayboard [--file path] add <title> [--priority low|normal|high]
-  relayboard [--file path] list
+  relayboard [--file path] list [--json]
   relayboard [--file path] start <id>
   relayboard [--file path] done <id>`;
