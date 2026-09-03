@@ -1,19 +1,40 @@
-# Git Workflow Fixture
+# Relayboard
 
-This disposable repository exercises Codex Claw's commit, push, pull-request,
-and merge controls without touching a production project.
+Relayboard is a small local-first task board for engineering teams. It stores a
+portable JSON file in the repository and provides a zero-dependency command-line
+interface for capturing and moving work.
+
+## Quick start
+
+```bash
+npm install
+npm start -- add "Ship the release" --priority high
+npm start -- list
+npm start -- start <task-id>
+npm start -- done <task-id>
+```
+
+Use `--file <path>` to work with another board. The default is
+`.relay/tasks.json`.
 
 ## Commands
 
+| Command | Description |
+| --- | --- |
+| `add <title> [--priority low\|normal\|high]` | Add a task to the board. |
+| `list` | List tasks in workflow order. |
+| `start <id>` | Move a task to `doing`. |
+| `done <id>` | Complete a task. |
+| `help` | Show command help. |
+
+## Development
+
+Relayboard deliberately has no runtime or development dependencies.
+
 ```bash
+npm run lint
 npm test
-npm run demo
 ```
 
-## Fixture state
-
-This README change is intentionally left unstaged for commit-scope testing.
-
-The second test round keeps another README edit unstaged as well.
-
-This second-worktree README line is intentionally left unstaged.
+The persisted format and recovery guarantees are documented in
+[docs/data-format.md](docs/data-format.md).

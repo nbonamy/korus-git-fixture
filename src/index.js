@@ -1,8 +1,5 @@
-import { formatGreeting } from './message.js';
-
-const recipients = ['Nicolas', 'Codex Claw'];
-
-for (const recipient of recipients) {
-  console.log(formatGreeting(recipient));
-}
-
+export { run } from './app.js';
+export { parseArguments } from './args.js';
+export { formatTaskTable } from './format.js';
+export { FileTaskStore } from './store.js';
+export { createTask, transitionTask, priorities, statuses } from './task.js';

@@ -1,10 +1,19 @@
 {
-  "name": "codex-claw-git-fixture",
+  "name": "relayboard-cli",
+  "version": "0.1.0",
+  "description": "A tiny local-first task board for engineering teams",
   "private": true,
   "type": "module",
+  "bin": {
+    "relayboard": "./bin/relayboard.js"
+  },
   "scripts": {
-    "demo": "node src/index.js",
+    "start": "node bin/relayboard.js",
+    "demo": "node bin/relayboard.js --file .relay/demo.json list",
+    "lint": "node --check bin/relayboard.js && node --check src/*.js && node --check test/*.js",
     "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
-
