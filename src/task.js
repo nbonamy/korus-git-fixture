@@ -38,3 +38,15 @@ export function transitionTask(task, nextStatus, options = {}) {
     ...(nextStatus === 'done' ? { completedAt: now } : {}),
   };
 }
+
+export function renameTask(task, title, options = {}) {
+  const normalizedTitle = title?.trim();
+  if (!normalizedTitle) throw new Error('Task title is required.');
+
+  const now = (options.now ?? (() => new Date()))().toISOString();
+  return {
+    ...task,
+    title: normalizedTitle,
+    updatedAt: now,
+  };
+}

@@ -37,6 +37,46 @@ test('starts an existing task', async () => {
   assert.equal(store.board.tasks[0].status, 'doing');
 });
 
+test('renames an existing task', async () => {
+  const store = memoryStore([{
+    id: 'task_ship',
+    title: 'Ship',
+    status: 'done',
+    priority: 'high',
+    createdAt: '2026-09-03T12:00:00.000Z',
+    updatedAt: '2026-09-03T13:00:00.000Z',
+    completedAt: '2026-09-03T13:00:00.000Z',
+  }]);
+  const output = [];
+
+  await run(['rename', 'task_ship', 'Ship release'], {
+    store,
+    output: (line) => output.push(line),
+    now: () => new Date('2026-09-03T14:00:00.000Z'),
+  });
+
+  assert.deepEqual(store.board.tasks[0], {
+    id: 'task_ship',
+    title: 'Ship release',
+    status: 'done',
+    priority: 'high',
+    createdAt: '2026-09-03T12:00:00.000Z',
+    updatedAt: '2026-09-03T14:00:00.000Z',
+    completedAt: '2026-09-03T13:00:00.000Z',
+  });
+  assert.equal(store.writes, 1);
+  assert.deepEqual(output, ['Renamed task_ship: Ship release']);
+});
+
+test('rejects blank rename titles and unknown task ids', async () => {
+  await assert.rejects(run(['rename', 'task_ship', '  '], {
+    store: memoryStore([{ id: 'task_ship', title: 'Ship' }]), output: () => {},
+  }), /title is required/i);
+  await assert.rejects(run(['rename', 'missing', 'Ship'], {
+    store: memoryStore(), output: () => {},
+  }), /Task not found/);
+});
+
 test('fails clearly for a missing task', async () => {
   await assert.rejects(run(['done', 'missing'], { store: memoryStore(), output: () => {} }), /Task not found/);
 });

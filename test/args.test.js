@@ -12,6 +12,12 @@ test('uses the default board for list', () => {
   assert.deepEqual(parseArguments(['list']), { command: 'list', file: '.relay/tasks.json' });
 });
 
+test('parses rename arguments', () => {
+  assert.deepEqual(parseArguments(['rename', 'task_ship', 'Ship today']), {
+    command: 'rename', file: '.relay/tasks.json', id: 'task_ship', title: 'Ship today',
+  });
+});
+
 test('rejects unknown commands and extra arguments', () => {
   assert.throws(() => parseArguments(['archive']), /Unknown command/);
   assert.throws(() => parseArguments(['list', 'extra']), /Unexpected argument/);
