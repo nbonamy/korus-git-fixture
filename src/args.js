@@ -24,6 +24,12 @@ export function parseArguments(argv) {
     assertNoArguments(args);
     return { command, file, id };
   }
+  if (command === 'rename') {
+    const id = args.shift();
+    const title = args.shift();
+    assertNoArguments(args);
+    return { command, file, id, title };
+  }
 
   throw new Error(`Unknown command: ${command}.`);
 }

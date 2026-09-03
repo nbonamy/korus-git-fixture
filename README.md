@@ -12,6 +12,7 @@ npm start -- add "Ship the release" --priority high
 npm start -- list
 npm start -- start <task-id>
 npm start -- done <task-id>
+npm start -- rename <task-id> "Publish the release"
 ```
 
 Use `--file <path>` to work with another board. The default is
@@ -25,6 +26,7 @@ Use `--file <path>` to work with another board. The default is
 | `list` | List tasks in workflow order. |
 | `start <id>` | Move a task to `doing`. |
 | `done <id>` | Complete a task. |
+| `rename <id> <title>` | Rename a task. |
 | `help` | Show command help. |
 
 ## Development
