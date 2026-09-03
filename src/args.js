@@ -1,3 +1,5 @@
+import { priorities, statuses } from './task.js';
+
 const defaultFile = '.relay/tasks.json';
 
 export function parseArguments(argv) {
@@ -10,8 +12,12 @@ export function parseArguments(argv) {
     return { command: 'help', file };
   }
   if (command === 'list') {
+    const status = takeOption(args, '--status');
+    const priority = takeOption(args, '--priority');
     assertNoArguments(args);
-    return { command, file };
+    if (status && !statuses.includes(status)) throw new Error(`Status must be one of: ${statuses.join(', ')}.`);
+    if (priority && !priorities.includes(priority)) throw new Error(`Priority must be one of: ${priorities.join(', ')}.`);
+    return { command, file, status, priority };
   }
   if (command === 'add') {
     const priority = takeOption(args, '--priority') ?? 'normal';

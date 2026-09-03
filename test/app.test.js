@@ -37,6 +37,21 @@ test('starts an existing task', async () => {
   assert.equal(store.board.tasks[0].status, 'doing');
 });
 
+test('filters listed tasks by status and priority', async () => {
+  const store = memoryStore([
+    { id: 'task_match', title: 'Ship', status: 'doing', priority: 'high', createdAt: '2026-09-03' },
+    { id: 'task_status', title: 'Plan', status: 'todo', priority: 'high', createdAt: '2026-09-03' },
+    { id: 'task_priority', title: 'Polish', status: 'doing', priority: 'low', createdAt: '2026-09-03' },
+  ]);
+  const output = [];
+  await run(['list', '--status', 'doing', '--priority', 'high'], {
+    store,
+    output: (line) => output.push(line),
+  });
+  assert.match(output[0], /task_match/);
+  assert.doesNotMatch(output[0], /task_status|task_priority/);
+});
+
 test('fails clearly for a missing task', async () => {
   await assert.rejects(run(['done', 'missing'], { store: memoryStore(), output: () => {} }), /Task not found/);
 });
