@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { createTask, transitionTask } from '../src/task.js';
+import { createTask, renameTask, transitionTask } from '../src/task.js';
 
 const fixedClock = () => new Date('2026-09-03T14:00:00.000Z');
 
@@ -18,6 +18,28 @@ test('creates a normalized todo task', () => {
 test('rejects empty titles and invalid priorities', () => {
   assert.throws(() => createTask({ title: '  ' }), /title is required/i);
   assert.throws(() => createTask({ title: 'Ship', priority: 'urgent' }), /Priority must be one of/);
+});
+
+test('renames a task while preserving its other fields', () => {
+  const task = {
+    id: 'task_1234',
+    title: 'Old title',
+    priority: 'high',
+    status: 'done',
+    createdAt: '2026-09-01T12:00:00.000Z',
+    updatedAt: '2026-09-02T13:00:00.000Z',
+    completedAt: '2026-09-02T13:00:00.000Z',
+  };
+
+  assert.deepEqual(renameTask(task, '  Corrected title  ', { now: fixedClock }), {
+    ...task,
+    title: 'Corrected title',
+    updatedAt: '2026-09-03T14:00:00.000Z',
+  });
+});
+
+test('rejects a blank renamed title', () => {
+  assert.throws(() => renameTask({ title: 'Old title' }, '  '), /title is required/i);
 });
 
 test('transitions tasks and records completion', () => {

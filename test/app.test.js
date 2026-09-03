@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { run } from '../src/app.js';
+import { helpText, run } from '../src/app.js';
 
 function memoryStore(tasks = []) {
   const board = { version: 1, tasks: [...tasks] };
@@ -11,6 +11,10 @@ function memoryStore(tasks = []) {
     async write() { this.writes += 1; },
   };
 }
+
+test('includes rename in command help', () => {
+  assert.match(helpText, /rename <id> <title>/);
+});
 
 test('adds a task and reports its id', async () => {
   const store = memoryStore();
@@ -37,6 +41,44 @@ test('starts an existing task', async () => {
   assert.equal(store.board.tasks[0].status, 'doing');
 });
 
+test('renames an existing task', async () => {
+  const store = memoryStore([{
+    id: 'task_ship',
+    title: 'Ship',
+    status: 'done',
+    priority: 'high',
+    createdAt: '2026-09-01T12:00:00.000Z',
+    updatedAt: '2026-09-02T13:00:00.000Z',
+    completedAt: '2026-09-02T13:00:00.000Z',
+  }]);
+  const output = [];
+
+  await run(['rename', 'task_ship', 'Ship release'], {
+    store,
+    output: (line) => output.push(line),
+    now: () => new Date('2026-09-03T14:00:00.000Z'),
+  });
+
+  assert.deepEqual(store.board.tasks[0], {
+    id: 'task_ship',
+    title: 'Ship release',
+    status: 'done',
+    priority: 'high',
+    createdAt: '2026-09-01T12:00:00.000Z',
+    updatedAt: '2026-09-03T14:00:00.000Z',
+    completedAt: '2026-09-02T13:00:00.000Z',
+  });
+  assert.equal(store.writes, 1);
+  assert.deepEqual(output, ['Renamed task_ship: Ship release']);
+});
+
+test('does not write when a rename title is blank', async () => {
+  const store = memoryStore([{ id: 'task_ship', title: 'Ship', status: 'todo', priority: 'normal' }]);
+  await assert.rejects(run(['rename', 'task_ship', '  '], { store, output: () => {} }), /title is required/i);
+  assert.equal(store.writes, 0);
+});
+
 test('fails clearly for a missing task', async () => {
   await assert.rejects(run(['done', 'missing'], { store: memoryStore(), output: () => {} }), /Task not found/);
+  await assert.rejects(run(['rename', 'missing', 'New title'], { store: memoryStore(), output: () => {} }), /Task not found/);
 });

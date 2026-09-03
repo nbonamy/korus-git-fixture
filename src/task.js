@@ -24,6 +24,18 @@ export function createTask(input, options = {}) {
   };
 }
 
+export function renameTask(task, title, options = {}) {
+  const normalizedTitle = title?.trim();
+  if (!normalizedTitle) throw new Error('Task title is required.');
+
+  const now = (options.now ?? (() => new Date()))().toISOString();
+  return {
+    ...task,
+    title: normalizedTitle,
+    updatedAt: now,
+  };
+}
+
 export function transitionTask(task, nextStatus, options = {}) {
   if (!statuses.includes(nextStatus)) throw new Error(`Unknown task status: ${nextStatus}.`);
   if (task.status === 'done' && nextStatus !== 'done') {
